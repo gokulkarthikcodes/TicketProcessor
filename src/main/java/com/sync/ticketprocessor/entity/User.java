@@ -4,12 +4,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "users")
 public class User {
 	@Id
 	private String id;
+	@Indexed
 	String username;
 	private String email;
 	private String password;
@@ -19,6 +21,10 @@ public class User {
 		this.username = username;
 		this.email = email;
 		this.password = password;
+	}
+
+	public User() {
+
 	}
 
 	public String getId() {
