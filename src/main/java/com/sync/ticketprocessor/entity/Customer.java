@@ -18,8 +18,8 @@ public class Customer extends Auditable implements Serializable {
 	private String id;
 	private String customerName;
 	private String companyName;
-	private String pContactNumber;
-	private String sContactNumber;
+	private String primaryContactNumber;
+	private String secContactNumber;
 	private String emailId;
 	private Address address;
 }
