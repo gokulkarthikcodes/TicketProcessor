@@ -16,4 +16,8 @@ public interface ProcessService {
     List<Process> getAllProcess();
 
     Process saveProcess(Process process);
+
+    Boolean deleteByProcessNameAndCreatedBy(String processName,String createdBy);
+
+    Boolean updateProcess(Process process);
 }

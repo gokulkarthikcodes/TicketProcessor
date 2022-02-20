@@ -1,24 +1,20 @@
 package com.sync.ticketprocessor.controller;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.validation.Valid;
-
+import com.sync.ticketprocessor.entity.Customer;
+import com.sync.ticketprocessor.service.CustomerService;
+import com.sync.ticketprocessor.service.impl.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.sync.ticketprocessor.entity.Customer;
-import com.sync.ticketprocessor.service.CustomerService;
-import com.sync.ticketprocessor.service.impl.UserDetailsImpl;
+import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.util.List;
+
+import static com.sync.ticketprocessor.constants.ConstantsUtil.CUSTOMER_DETAILS_ERROR;
 
 @RestController
 public class CustomerController {
@@ -28,7 +24,7 @@ public class CustomerController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	@RequestMapping(value = "/createCustomer", method = RequestMethod.POST)
+	@PostMapping(value = "/createCustomer")
 	public ResponseEntity<Customer> createCustomer(Authentication authentication,
 			@Valid @RequestBody Customer customer) {
 		try {
@@ -36,14 +32,14 @@ public class CustomerController {
 			customer.createAudit(userPrincipal.getId(), userPrincipal.getUsername());
 			customer = customerService.createCustomer(customer);
 		} catch (Exception e) {
-			logger.error("Error getting saving customer details", e);
+			logger.error(CUSTOMER_DETAILS_ERROR, e);
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
 		}
 
 		return ResponseEntity.status(HttpStatus.OK).body(customer);
 	}
 
-	@RequestMapping(value = "/updateCustomer", method = RequestMethod.POST)
+	@PostMapping(value = "/updateCustomer")
 	public ResponseEntity<Customer> updateCustomer(Authentication authentication,
 			@Valid @RequestBody Customer customer) {
 		try {
@@ -51,39 +47,38 @@ public class CustomerController {
 			customer.createAudit(userPrincipal.getId(), userPrincipal.getUsername());
 			customer = customerService.createCustomer(customer);
 		} catch (Exception e) {
-			logger.error("Error getting saving customer details", e);
+			logger.error(CUSTOMER_DETAILS_ERROR, e);
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
 		}
 
 		return ResponseEntity.status(HttpStatus.OK).body(customer);
 	}
 
-	@RequestMapping(value = "/getMyCustomers", method = RequestMethod.GET)
+	@GetMapping(value = "/getMyCustomers")
 	public ResponseEntity<List<Customer>> getMyCustomers(Authentication authentication) {
 		List<Customer> customers = null;
 		try {
 			UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 			customers = customerService.getMyCustomers(userPrincipal.getId());
 		} catch (Exception e) {
-			logger.error("Error getting saving customer details", e);
+			logger.error(CUSTOMER_DETAILS_ERROR, e);
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
 		}
 
 		return ResponseEntity.status(HttpStatus.OK).body(customers);
 	}
 
-	@RequestMapping(value = "/deleteCustomer/{companyId}", method = RequestMethod.GET)
+	@GetMapping(value = "/deleteCustomer/{companyId}")
 	public ResponseEntity<Boolean> deleteCustomer(Authentication authentication, @PathVariable String companyId) {
 		Boolean flag = false;
 		try {
 			UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 			flag = customerService.deleteCustomer(userPrincipal.getId(), companyId);
 		} catch (Exception e) {
-			logger.error("Error getting saving customer details", e);
+			logger.error(CUSTOMER_DETAILS_ERROR, e);
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
 		}
 
 		return ResponseEntity.status(HttpStatus.OK).body(flag);
 	}
-
 }

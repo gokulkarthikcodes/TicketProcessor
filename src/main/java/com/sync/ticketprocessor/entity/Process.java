@@ -1,10 +1,15 @@
 package com.sync.ticketprocessor.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+
 @Document(collection = "process")
+@Getter
+@Setter
 public class Process {
 
     @Id
@@ -15,37 +20,8 @@ public class Process {
 
     String processName;
 
+    Integer processOrder;
+
     String createdBy;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Long getProcessId() {
-        return processId;
-    }
-
-    public void setProcessId(Long processId) {
-        this.processId = processId;
-    }
-
-    public String getProcessName() {
-        return processName;
-    }
-
-    public void setProcessName(String processName) {
-        this.processName = processName;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
 }

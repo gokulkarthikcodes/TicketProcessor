@@ -36,6 +36,32 @@ public class ProcessServiceImpl implements ProcessService {
 
     @Override
     public Process saveProcess(Process process) {
-        return processRepository.save(process);
+        Process existing;
+        existing = processRepository.findProcessByOrderAndCreatedBy(process.getProcessOrder(),process.getCreatedBy());
+        if(null == existing)
+             return processRepository.save(process);
+        else
+            return null;
+    }
+
+    @Override
+    public Boolean deleteByProcessNameAndCreatedBy(String processName, String createdBy) {
+        Process process;
+        process = processRepository.deleteByProcessNameAndCreatedBy(processName,createdBy);
+        if(null != process)
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public Boolean updateProcess(Process process) {
+        Process existing = processRepository.findProcessByOrderAndCreatedBy(process.getProcessOrder(),process.getCreatedBy());
+        if(null == existing) {
+            Process updatedProcess = processRepository.save(process);
+            return true;
+        }
+        else
+            return false;
     }
 }
