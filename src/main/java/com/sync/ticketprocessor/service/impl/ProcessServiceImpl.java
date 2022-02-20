@@ -57,9 +57,15 @@ public class ProcessServiceImpl implements ProcessService {
     @Override
     public Boolean updateProcess(Process process) {
         Process existing = processRepository.findProcessByOrderAndCreatedBy(process.getProcessOrder(),process.getCreatedBy());
-        if(null == existing) {
-            Process updatedProcess = processRepository.save(process);
-            return true;
+        if(existing != null)
+        {
+            if(existing.getProcessOrder() == process.getProcessOrder()){
+                return false;
+            }
+            else{
+                processRepository.save(process);
+                return true;
+            }
         }
         else
             return false;
