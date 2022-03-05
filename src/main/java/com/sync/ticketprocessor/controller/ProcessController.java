@@ -1,5 +1,6 @@
 package com.sync.ticketprocessor.controller;
 
+import com.sync.ticketprocessor.dto.ProcessDTO;
 import com.sync.ticketprocessor.entity.Process;
 import com.sync.ticketprocessor.service.ProcessService;
 import com.sync.ticketprocessor.service.impl.UserDetailsImpl;
@@ -25,7 +26,7 @@ public class ProcessController {
     private static final Logger logger = LoggerFactory.getLogger(ProcessController.class);
 
     @GetMapping(value = "/getbyname/{processName}")
-    public ResponseEntity<Process> getProcessByName(@PathVariable String processName) {
+    public ResponseEntity<Process> getProcessByName(Authentication authentication, @PathVariable String processName) {
         Process process = null;
         try {
             process = processService.getProcessByName(processName);
@@ -37,7 +38,7 @@ public class ProcessController {
     }
 
     @GetMapping(value = "/getbyid/{processId}")
-    public ResponseEntity<Process> getProcessById(@PathVariable Integer processId) {
+    public ResponseEntity<Process> getProcessById(Authentication authentication, @PathVariable Integer processId) {
         Process process = null;
         try {
             process = processService.getProcessById(processId);
@@ -61,10 +62,12 @@ public class ProcessController {
     }
 
     @PostMapping(value = "/save")
-    public ResponseEntity<Process> saveProcess(@RequestBody Process process) {
+    public ResponseEntity<Process> saveProcess(Authentication authentication, @RequestBody ProcessDTO processDTO) {
         Process savedProcess = null;
         try {
-            savedProcess = processService.saveProcess(process);
+            UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+            processDTO.setCreatedBy(userPrincipal.getUsername());
+            savedProcess = processService.saveProcess(processDTO);
         } catch (Exception e){
             logger.error(PROCESS_DETAILS_ERROR,e);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
@@ -73,22 +76,25 @@ public class ProcessController {
     }
 
     @PostMapping(value = "/update")
-    public ResponseEntity<Boolean> updateProcess(@RequestBody Process process) {
-        Boolean updateStatus = false;
+    public ResponseEntity<Process> updateProcess(Authentication authentication, @RequestBody ProcessDTO processDTO) {
+        Process updatedProcess = null;
         try {
-            updateStatus = processService.updateProcess(process);
+            UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+            processDTO.setUpdatedBy(userPrincipal.getUsername());
+            updatedProcess = processService.updateProcess(processDTO);
         } catch (Exception e){
             logger.error(PROCESS_DETAILS_ERROR,e);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(updateStatus);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedProcess);
     }
 
-    @GetMapping(value = "/getbycreatedby/{createdBy}")
-    public ResponseEntity<List<Process>> getProcessByCreatedBy(@PathVariable String createdBy) {
+    @GetMapping(value = "/getbycreatedby")
+    public ResponseEntity<List<Process>> getProcessByCreatedBy(Authentication authentication) {
         List<Process> processes = null;
         try{
-            processes = processService.getProcessByCreatedBy(createdBy);
+            UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+            processes = processService.getProcessByCreatedBy(userPrincipal.getUsername());
         } catch (Exception e){
             logger.error(PROCESS_DETAILS_ERROR,e);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
@@ -96,12 +102,11 @@ public class ProcessController {
         return ResponseEntity.status(HttpStatus.OK).body(processes);
     }
 
-    @GetMapping(value = "/deletebyname/{processName}")
-    public ResponseEntity<Boolean> deleteProcess(Authentication authentication, @PathVariable String processName) {
+    @PostMapping(value = "/delete")
+    public ResponseEntity<Boolean> deleteProcess(Authentication authentication, @RequestBody ProcessDTO processDTO) {
         Boolean flag = false;
         try {
-            UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-            flag = processService.deleteByProcessNameAndCreatedBy(processName,userPrincipal.getUsername());
+            flag = processService.deleteByIdAndCreatedBy(processDTO);
         } catch (Exception e) {
             logger.error(PROCESS_DETAILS_ERROR, e);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);

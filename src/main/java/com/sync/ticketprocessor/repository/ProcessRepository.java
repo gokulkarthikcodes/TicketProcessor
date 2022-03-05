@@ -19,9 +19,15 @@ public interface ProcessRepository extends MongoRepository<Process,String> {
 
     Process save(Process process);
 
-    Process deleteByProcessNameAndCreatedBy(String processName, String createdBy);
+    Process deleteByIdAndCreatedBy(String id, String createdBy);
 
     @Query("{'processOrder': ?0, 'createdBy' :?1}")
     Process findProcessByOrderAndCreatedBy(Integer processOrder, String createdBy);
+
+    @Query("{'processName': ?0, 'createdBy' :?1}")
+    Process findProcessByNameAndCreatedBy(String processName, String createdBy);
+
+    @Query("{'id': ?0, 'createdBy' :?1}")
+    Process findProcessByIdAndCreatedBy(String id, String createdBy);
 }
 
