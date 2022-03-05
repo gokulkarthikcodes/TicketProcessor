@@ -2,11 +2,10 @@ package com.sync.ticketprocessor.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.time.LocalDateTime;
 
 
 @Document(collection = "process")
@@ -22,11 +21,11 @@ public class Process {
     @Indexed
     String createdBy;
 
-    LocalDateTime created;
+    DateTime created;
 
     String updatedBy;
 
-    LocalDateTime updated;
+    DateTime updated;
 
     @Override
     public String toString() {

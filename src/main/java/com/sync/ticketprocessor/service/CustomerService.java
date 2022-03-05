@@ -1,14 +1,19 @@
 package com.sync.ticketprocessor.service;
 
-import java.util.List;
-
+import com.sync.ticketprocessor.dto.CustomerDTO;
 import com.sync.ticketprocessor.entity.Customer;
+
+import java.util.List;
 
 public interface CustomerService {
 
 	Customer createCustomer(Customer customer);
 
-	List<Customer> getMyCustomers(String userId);
+	CustomerDTO createCustomer(CustomerDTO customerDTO);
 
-	Boolean deleteCustomer(String userId, String companyId);
+	List<CustomerDTO> getMyCustomers(String userId);
+
+	Boolean deleteCustomer(String id, String createdBy);
+
+	CustomerDTO updateCustomer(CustomerDTO customerDTO);
 }

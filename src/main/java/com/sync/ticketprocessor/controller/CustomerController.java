@@ -1,6 +1,6 @@
 package com.sync.ticketprocessor.controller;
 
-import com.sync.ticketprocessor.entity.Customer;
+import com.sync.ticketprocessor.dto.CustomerDTO;
 import com.sync.ticketprocessor.service.CustomerService;
 import com.sync.ticketprocessor.service.impl.UserDetailsImpl;
 import org.slf4j.Logger;
@@ -17,63 +17,63 @@ import java.util.List;
 import static com.sync.ticketprocessor.constants.ConstantsUtil.CUSTOMER_DETAILS_ERROR;
 
 @RestController
+@RequestMapping(value = "/customer")
 public class CustomerController {
 
 	@Resource
 	CustomerService customerService;
 
-	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
-	@PostMapping(value = "/createCustomer")
-	public ResponseEntity<Customer> createCustomer(Authentication authentication,
-			@Valid @RequestBody Customer customer) {
+	@PostMapping(value = "/save")
+	public ResponseEntity<CustomerDTO> createCustomer(Authentication authentication,
+			@Valid @RequestBody CustomerDTO customerDTO) {
 		try {
 			UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-			customer.createAudit(userPrincipal.getId(), userPrincipal.getUsername());
-			customer = customerService.createCustomer(customer);
+	        customerDTO.createAuditForSave(userPrincipal.getUsername());
+			customerDTO = customerService.createCustomer(customerDTO);
 		} catch (Exception e) {
 			logger.error(CUSTOMER_DETAILS_ERROR, e);
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
 		}
 
-		return ResponseEntity.status(HttpStatus.OK).body(customer);
+		return ResponseEntity.status(HttpStatus.OK).body(customerDTO);
 	}
 
-	@PostMapping(value = "/updateCustomer")
-	public ResponseEntity<Customer> updateCustomer(Authentication authentication,
-			@Valid @RequestBody Customer customer) {
+	@PostMapping(value = "/update")
+	public ResponseEntity<CustomerDTO> updateCustomer(Authentication authentication,
+			@Valid @RequestBody CustomerDTO customerDTO) {
 		try {
 			UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-			customer.createAudit(userPrincipal.getId(), userPrincipal.getUsername());
-			customer = customerService.createCustomer(customer);
+			customerDTO.createAuditForUpdate(userPrincipal.getUsername());
+			customerDTO = customerService.updateCustomer(customerDTO);
 		} catch (Exception e) {
 			logger.error(CUSTOMER_DETAILS_ERROR, e);
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
 		}
 
-		return ResponseEntity.status(HttpStatus.OK).body(customer);
+		return ResponseEntity.status(HttpStatus.OK).body(customerDTO);
 	}
 
-	@GetMapping(value = "/getMyCustomers")
-	public ResponseEntity<List<Customer>> getMyCustomers(Authentication authentication) {
-		List<Customer> customers = null;
+	@GetMapping(value = "/all")
+	public ResponseEntity<List<CustomerDTO>> getMyCustomers(Authentication authentication) {
+		List<CustomerDTO> customerDTOList = null;
 		try {
 			UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-			customers = customerService.getMyCustomers(userPrincipal.getId());
+			customerDTOList = customerService.getMyCustomers(userPrincipal.getUsername());
 		} catch (Exception e) {
 			logger.error(CUSTOMER_DETAILS_ERROR, e);
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
 		}
 
-		return ResponseEntity.status(HttpStatus.OK).body(customers);
+		return ResponseEntity.status(HttpStatus.OK).body(customerDTOList);
 	}
 
-	@GetMapping(value = "/deleteCustomer/{companyId}")
-	public ResponseEntity<Boolean> deleteCustomer(Authentication authentication, @PathVariable String companyId) {
+	@PostMapping(value = "/delete")
+	public ResponseEntity<Boolean> deleteCustomer(Authentication authentication, @RequestBody CustomerDTO customerDTO) {
 		Boolean flag = false;
 		try {
-			UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-			flag = customerService.deleteCustomer(userPrincipal.getId(), companyId);
+			flag = customerService.deleteCustomer(customerDTO.getId(), customerDTO.getCreatedBy());
 		} catch (Exception e) {
 			logger.error(CUSTOMER_DETAILS_ERROR, e);
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);

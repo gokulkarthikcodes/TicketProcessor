@@ -4,10 +4,10 @@ import com.sync.ticketprocessor.dto.ProcessDTO;
 import com.sync.ticketprocessor.entity.Process;
 import com.sync.ticketprocessor.repository.ProcessRepository;
 import com.sync.ticketprocessor.service.ProcessService;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -51,7 +51,7 @@ public class ProcessServiceImpl implements ProcessService {
         Process process = new Process();
         process.setProcessName(processDTO.getProcessName());
         process.setCreatedBy(processDTO.getCreatedBy());
-        process.setCreated(LocalDateTime.now());
+        process.setCreated(DateTime.now());
         return process;
     }
 
@@ -96,7 +96,7 @@ public class ProcessServiceImpl implements ProcessService {
         process.setCreated(processDTO.getCreated());
         process.setProcessName(processDTO.getProcessName());
         process.setUpdatedBy(processDTO.getUpdatedBy());
-        process.setUpdated(LocalDateTime.now());
+        process.setUpdated(DateTime.now());
         return process;
     }
 

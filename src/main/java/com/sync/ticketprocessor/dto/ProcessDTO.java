@@ -2,8 +2,7 @@ package com.sync.ticketprocessor.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
+import org.joda.time.DateTime;
 
 @Getter
 @Setter
@@ -15,7 +14,7 @@ public class ProcessDTO {
 
     String createdBy;
 
-    LocalDateTime created;
+    DateTime created;
 
     String updatedBy;
 
