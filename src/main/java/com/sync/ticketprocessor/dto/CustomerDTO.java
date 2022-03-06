@@ -19,5 +19,23 @@ public class CustomerDTO extends Auditable {
     private String city;
     private String state;
     private String country;
-    private String zipCode;
+    private String pinCode;
+
+    @Override
+    public String toString() {
+        return "CustomerDTO{" +
+                "customerName='" + customerName + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", primaryContactNumber='" + primaryContactNumber + '\'' +
+                ", secContactNumber='" + secContactNumber + '\'' +
+                ", gst='" + gst + '\'' +
+                ", emailId='" + emailId + '\'' +
+                ", streetLine1='" + streetLine1 + '\'' +
+                ", streetLine2='" + streetLine2 + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", country='" + country + '\'' +
+                ", zipCode='" + pinCode + '\'' +
+                '}';
+    }
 }

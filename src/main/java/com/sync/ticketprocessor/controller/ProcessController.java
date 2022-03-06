@@ -25,36 +25,13 @@ public class ProcessController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProcessController.class);
 
-    @GetMapping(value = "/getbyname/{processName}")
-    public ResponseEntity<Process> getProcessByName(Authentication authentication, @PathVariable String processName) {
-        Process process = null;
-        try {
-            process = processService.getProcessByName(processName);
-        } catch (Exception e) {
-            logger.error(PROCESS_DETAILS_ERROR,e);
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(process);
-    }
-
-    @GetMapping(value = "/getbyid/{processId}")
-    public ResponseEntity<Process> getProcessById(Authentication authentication, @PathVariable Integer processId) {
-        Process process = null;
-        try {
-            process = processService.getProcessById(processId);
-        } catch (Exception e) {
-            logger.error(PROCESS_DETAILS_ERROR,e);
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(process);
-    }
-
     @GetMapping(value = "/all")
-    public ResponseEntity<List<Process>> getAllProcess() {
+    public ResponseEntity<List<Process>> getProcessByCreatedBy(Authentication authentication) {
         List<Process> processes = null;
-        try {
-            processes = processService.getAllProcess();
-        } catch (Exception e) {
+        try{
+            UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+            processes = processService.getProcessByCreatedBy(userPrincipal.getUsername());
+        } catch (Exception e){
             logger.error(PROCESS_DETAILS_ERROR,e);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
         }
@@ -87,19 +64,6 @@ public class ProcessController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(updatedProcess);
-    }
-
-    @GetMapping(value = "/getbycreatedby")
-    public ResponseEntity<List<Process>> getProcessByCreatedBy(Authentication authentication) {
-        List<Process> processes = null;
-        try{
-            UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-            processes = processService.getProcessByCreatedBy(userPrincipal.getUsername());
-        } catch (Exception e){
-            logger.error(PROCESS_DETAILS_ERROR,e);
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(processes);
     }
 
     @PostMapping(value = "/delete")

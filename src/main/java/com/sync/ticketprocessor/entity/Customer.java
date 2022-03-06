@@ -17,4 +17,16 @@ public class Customer extends Auditable{
 	private String emailId;
 	private Address address;
 
+	@Override
+	public String toString() {
+		return "Customer{" +
+				"customerName='" + customerName + '\'' +
+				", companyName='" + companyName + '\'' +
+				", primaryContactNumber='" + primaryContactNumber + '\'' +
+				", secContactNumber='" + secContactNumber + '\'' +
+				", gst='" + gst + '\'' +
+				", emailId='" + emailId + '\'' +
+				", address=" + address +
+				'}';
+	}
 }

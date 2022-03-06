@@ -4,7 +4,7 @@ public enum Role {
 	ROLE_USER, ROLE_ADMIN, ROLE_OWNER, ROLE_CONTRACTOR;
 
 	public static Boolean isExist(String role) {
-		if (role == null || role == "") {
+		if (role == null || role.equals("")) {
 			return false;
 		}
 
