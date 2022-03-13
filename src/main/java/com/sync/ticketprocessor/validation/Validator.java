@@ -54,10 +54,12 @@ public class Validator {
     }
 
     private static boolean validateGst(String gst){
+        if(null == gst || gst.length() == 0)
+            return true;
         boolean check = Pattern.compile(gstRegex)
                 .matcher(gst)
                 .matches();
-        if(!check && (gst.length() !=0 || gst != null))
+        if(!check)
             throw new InputValidationFailedException(ConstantsUtil.INVALID_GST);
         return true;
     }

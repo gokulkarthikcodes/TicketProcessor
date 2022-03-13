@@ -83,7 +83,6 @@ public class CustomerServiceImpl implements CustomerService {
         return true;
     }
 
-    //createdBy AND (mobile or companyname or gst or email)
     private boolean validateCustomerForUpdate(CustomerDTO customerDTO) {
         Customer existing = customerCrudRepository.findByIdAndCreatedBy(customerDTO.getId(), customerDTO.getCreatedBy());
         if (null == existing)
