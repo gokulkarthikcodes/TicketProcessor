@@ -108,6 +108,33 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private boolean validateCustomerForUpdate(CustomerDTO customerDTO) {
+        String paramCompanyName;
+        String paramEmailId;
+        String paramGST;
+        String paramPrimaryContactNumber;
+        if (null == customerDTO.getCompanyName() || customerDTO.getCompanyName().length() == 0) {
+            paramCompanyName = "d3567187481197c992e6888c2b619287";
+        } else
+            paramCompanyName = customerDTO.getCompanyName();
+        if (null == customerDTO.getGst() || customerDTO.getGst().length() == 0) {
+            paramGST = "d3567187481197c992e6888c2b619287";
+        } else {
+            paramGST = customerDTO.getGst();
+        }
+        if (null == customerDTO.getPrimaryContactNumber() || customerDTO.getPrimaryContactNumber().length() == 0) {
+            paramPrimaryContactNumber = "d3567187481197c992e6888c2b619287";
+        } else {
+            paramPrimaryContactNumber = customerDTO.getPrimaryContactNumber();
+        }
+        if (null == customerDTO.getEmailId() || customerDTO.getEmailId().length() == 0) {
+            paramEmailId = "d3567187481197c992e6888c2b619287";
+        } else {
+            paramEmailId = customerDTO.getEmailId();
+        }
+
+        List<Customer> existingList = customerCrudRepository.findCustomers(customerDTO.getCreatedBy(), paramCompanyName, paramPrimaryContactNumber, paramGST, paramEmailId);
+        if(!existingList.isEmpty())
+            throw new RecordAlreadyExistsException(ConstantsUtil.RECORD_ALREADY_EXISTS_FOR + ConstantsUtil.SPACE + customerDTO.getCustomerName() + ConstantsUtil.SPACE + customerDTO.getPrimaryContactNumber() + ConstantsUtil.SPACE + customerDTO.getGst() + ConstantsUtil.SPACE + customerDTO.getEmailId());
         Customer existing = customerCrudRepository.findByIdAndCreatedBy(customerDTO.getId(), customerDTO.getCreatedBy());
         if (null == existing)
             throw new RecordNotFoundException(ConstantsUtil.RECORD_NOT_FOUND_FOR + ConstantsUtil.SPACE + customerDTO.getCustomerName());
