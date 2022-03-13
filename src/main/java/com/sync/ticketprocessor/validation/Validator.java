@@ -23,10 +23,12 @@ public class Validator {
     private static final String stateRegex = "^[a-zA-Z]+(?:[\\s-][a-zA-Z]+)*$";
 
     private static boolean validateEmail(String emailAddress) {
+        if(null == emailAddress || emailAddress.length() == 0)
+            return true;
         boolean check = Pattern.compile(emailRegex)
                 .matcher(emailAddress)
                 .matches();
-        if(!check && (emailAddress.length() !=0 || emailAddress != null))
+        if(!check)
             throw new InputValidationFailedException(ConstantsUtil.INVALID_EMAIL_ID);
         return true;
     }
