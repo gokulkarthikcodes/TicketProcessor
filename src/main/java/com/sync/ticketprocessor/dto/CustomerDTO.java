@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 public class CustomerDTO extends Auditable {
 
-    private String id;
     private String customerName;
     private String companyName;
     private String primaryContactNumber;

@@ -10,7 +10,7 @@ public interface CustomerService {
 
 	List<CustomerDTO> getMyCustomers(String userId);
 
-	Boolean deleteCustomer(String id, String createdBy);
+	Boolean deleteCustomer(CustomerDTO customerDTO);
 
 	CustomerDTO updateCustomer(CustomerDTO customerDTO);
 }

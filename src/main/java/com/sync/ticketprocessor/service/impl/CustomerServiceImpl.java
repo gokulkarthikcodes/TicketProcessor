@@ -8,13 +8,11 @@ import com.sync.ticketprocessor.exception.RecordAlreadyExistsException;
 import com.sync.ticketprocessor.exception.RecordNotFoundException;
 import com.sync.ticketprocessor.repository.CustomerCrudRepository;
 import com.sync.ticketprocessor.service.CustomerService;
-import com.sync.ticketprocessor.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -28,15 +26,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Resource
     CustomerCrudRepository customerCrudRepository;
-
-    @Override
-    @Transactional
-    public CustomerDTO createCustomer(CustomerDTO customerDTO) {
-        validateCustomerForSave(customerDTO);
-        Customer customer = Converter.convertCustomerFromDTOToEntity(customerDTO);
-        customer = customerCrudRepository.save(customer);
-        return Converter.convertCustomerFromEntityToDTO(customer);
-    }
 
     @Override
     public List<CustomerDTO> getMyCustomers(String createdBy) {
@@ -53,17 +42,25 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public Boolean deleteCustomer(String id, String createdBy) {
-        Boolean flag = false;
-        try {
-            Customer customer = customerCrudRepository.deleteByIdAndCreatedBy(id, createdBy);
-            if (!ObjectUtils.isEmpty(customer)) {
-                flag = true;
-            }
-        } catch (Exception e) {
-            logger.error("Error saving customer", e);
-        }
-        return flag;
+    public CustomerDTO createCustomer(CustomerDTO customerDTO) {
+        validateCustomerForSave(customerDTO);
+        Customer customer = Converter.convertCustomerFromDTOToEntity(customerDTO);
+        customer = customerCrudRepository.save(customer);
+        return Converter.convertCustomerFromEntityToDTO(customer);
+    }
+
+    @Override
+    @Transactional
+    public Boolean deleteCustomer(CustomerDTO customerDTO) {
+        validateCustomerForDelete(customerDTO);
+        Customer customer = customerCrudRepository.deleteByIdAndCreatedBy(customerDTO.getId(), customerDTO.getCreatedBy());
+        return null != customer;
+    }
+
+    public void validateCustomerForDelete(CustomerDTO customerDTO) {
+        Customer existing = customerCrudRepository.findByIdAndCreatedBy(customerDTO.getId(), customerDTO.getCreatedBy());
+        if(null == existing)
+            throw new RecordNotFoundException(ConstantsUtil.RECORD_NOT_FOUND_FOR + ConstantsUtil.SPACE + customerDTO.getCompanyName());
     }
 
     @Override
@@ -76,16 +73,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private boolean validateCustomerForUpdate(CustomerDTO customerDTO) {
-
         boolean isUnique = validateUpdateValuesForUniqueNess(customerDTO);
         if (!isUnique)
-            throw new RecordAlreadyExistsException(ConstantsUtil.RECORD_ALREADY_EXISTS_FOR + ConstantsUtil.SPACE + customerDTO.getCustomerName() + ConstantsUtil.SPACE + customerDTO.getPrimaryContactNumber() + ConstantsUtil.SPACE + customerDTO.getGst() + ConstantsUtil.SPACE + customerDTO.getEmailId());
+            throw new RecordAlreadyExistsException(ConstantsUtil.RECORD_ALREADY_EXISTS_FOR + ConstantsUtil.SPACE + customerDTO.getCompanyName() + ConstantsUtil.SPACE + customerDTO.getPrimaryContactNumber() + ConstantsUtil.SPACE + customerDTO.getGst() + ConstantsUtil.SPACE + customerDTO.getEmailId());
 
         boolean isExists = validateIfUpdateRecordStillExists(customerDTO);
         if (!isExists)
-            throw new RecordNotFoundException(ConstantsUtil.RECORD_NOT_FOUND_FOR + ConstantsUtil.SPACE + customerDTO.getCustomerName());
+            throw new RecordNotFoundException(ConstantsUtil.RECORD_NOT_FOUND_FOR + ConstantsUtil.SPACE + customerDTO.getCompanyName());
 
-        Validator.validateCustomerDTO(customerDTO);
         return true;
     }
 
@@ -101,15 +96,14 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     private boolean validateIfUpdateRecordStillExists(CustomerDTO customerDTO) {
-        Customer existing = customerCrudRepository.findByIdAndCreatedBy(customerDTO.getId(), customerDTO.getCreatedBy());
-        return null != existing;
+        Customer current = customerCrudRepository.findByIdAndCreatedBy(customerDTO.getId(), customerDTO.getCreatedBy());
+        return null != current;
     }
 
     private boolean validateCustomerForSave(CustomerDTO customerDTO) {
         boolean isUnique = validateSaveValuesForUniqueNess(customerDTO);
         if (!isUnique)
-            throw new RecordAlreadyExistsException(ConstantsUtil.RECORD_ALREADY_EXISTS_FOR + ConstantsUtil.SPACE + customerDTO.getCustomerName() + ConstantsUtil.SPACE + customerDTO.getPrimaryContactNumber() + ConstantsUtil.SPACE + customerDTO.getGst() + ConstantsUtil.SPACE + customerDTO.getEmailId());
-        Validator.validateCustomerDTO(customerDTO);
+            throw new RecordAlreadyExistsException(ConstantsUtil.RECORD_ALREADY_EXISTS_FOR + ConstantsUtil.SPACE + customerDTO.getCompanyName() + ConstantsUtil.SPACE + customerDTO.getPrimaryContactNumber() + ConstantsUtil.SPACE + customerDTO.getGst() + ConstantsUtil.SPACE + customerDTO.getEmailId());
         return true;
     }
 

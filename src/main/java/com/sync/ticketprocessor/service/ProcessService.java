@@ -1,24 +1,16 @@
 package com.sync.ticketprocessor.service;
 
 import com.sync.ticketprocessor.dto.ProcessDTO;
-import com.sync.ticketprocessor.entity.Process;
 
 import java.util.List;
 
 public interface ProcessService {
 
-    Process getProcessByName(String processName);
+    List<ProcessDTO> getMyProcesses(String createdBy);
 
+    ProcessDTO createProcess(ProcessDTO processDTO);
 
-    Process getProcessById(Integer processId);
+    Boolean deleteProcess(ProcessDTO processDTO);
 
-    List<Process> getProcessByCreatedBy(String createdBy);
-
-    List<Process> getAllProcess();
-
-    Process saveProcess(ProcessDTO processDTO);
-
-    Boolean deleteByIdAndCreatedBy(ProcessDTO processDTO);
-
-    Process updateProcess(ProcessDTO processDTO);
+    ProcessDTO updateProcess(ProcessDTO processDTO);
 }

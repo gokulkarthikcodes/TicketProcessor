@@ -1,13 +1,17 @@
 package com.sync.ticketprocessor.service.impl;
 
+import com.sync.ticketprocessor.constants.ConstantsUtil;
+import com.sync.ticketprocessor.conversion.Converter;
 import com.sync.ticketprocessor.dto.ProcessDTO;
 import com.sync.ticketprocessor.entity.Process;
+import com.sync.ticketprocessor.exception.RecordAlreadyExistsException;
+import com.sync.ticketprocessor.exception.RecordNotFoundException;
 import com.sync.ticketprocessor.repository.ProcessRepository;
 import com.sync.ticketprocessor.service.ProcessService;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,103 +20,76 @@ public class ProcessServiceImpl implements ProcessService {
     @Autowired
     ProcessRepository processRepository;
 
-    @Override
-    public Process getProcessByName(String processName) {
-        return processRepository.getProcessByName(processName);
-    }
 
     @Override
-    public Process getProcessById(Integer processId) {
-        return processRepository.getProcessById(processId);
-    }
-
-    @Override
-    public List<Process> getProcessByCreatedBy(String createdBy) {
-        return processRepository.getProcessByCreatedBy(createdBy);
+    public List<ProcessDTO> getMyProcesses(String createdBy) {
+        List<Process> processes = null;
+        List<ProcessDTO> processDTOList = new ArrayList<>();
+        processes = processRepository.getProcessByCreatedBy(createdBy);
+        processes.stream().forEach(process -> processDTOList.add(Converter.covertProcessFromEntityToDTO(process)));
+        return processDTOList;
     }
 
     @Override
-    public List<Process> getAllProcess() {
-        return processRepository.findAll();
+    public ProcessDTO createProcess(ProcessDTO processDTO) {
+        validateProcessForSave(processDTO);
+        Process process = Converter.convertProcessFromDTOToEntity(processDTO);
+        process = processRepository.save(process);
+        return Converter.covertProcessFromEntityToDTO(process);
+    }
+
+
+    @Override
+    public ProcessDTO updateProcess(ProcessDTO processDTO) {
+        validateProcessForUpdate(processDTO);
+        Process process = Converter.convertProcessFromDTOToEntity(processDTO);
+        process = processRepository.save(process);
+        return Converter.covertProcessFromEntityToDTO(process);
     }
 
     @Override
-    public Process saveProcess(ProcessDTO processDTO) {
-        boolean isValidated = validateForSave(processDTO);
-        if (isValidated) {
-            Process process = convertToEntityForSave(processDTO);
-            return processRepository.save(process);
-        } else {
-            return null;
-        }
+    public Boolean deleteProcess(ProcessDTO processDTO) {
+        validateProcessForDelete(processDTO);
+        Process process = processRepository.deleteByIdAndCreatedBy(processDTO.getId(), processDTO.getCreatedBy());
+        return null != process;
     }
 
-    private Process convertToEntityForSave(ProcessDTO processDTO) {
-        Process process = new Process();
-        process.setProcessName(processDTO.getProcessName());
-        process.setCreatedBy(processDTO.getCreatedBy());
-        process.setCreated(DateTime.now());
-        return process;
+    public boolean validateProcessForDelete(ProcessDTO processDTO) {
+        Process existing = processRepository.findProcessByIdAndCreatedBy(processDTO.getId(), processDTO.getCreatedBy());
+        if(null == existing)
+            throw new RecordNotFoundException(ConstantsUtil.RECORD_NOT_FOUND_FOR + ConstantsUtil.SPACE + processDTO.getProcessName());
+        return true;
     }
 
+    private void validateProcessForSave(ProcessDTO processDTO) {
+        validateSaveValuesForUniqueNess(processDTO);
+    }
 
-
-    public boolean validateForSave(ProcessDTO processDTO) {
+    private void validateSaveValuesForUniqueNess(ProcessDTO processDTO) {
         Process existing = processRepository.findProcessByNameAndCreatedBy(processDTO.getProcessName(), processDTO.getCreatedBy());
-        if (null == existing) {
-            if (processDTO.getProcessName().length() < 3) return false;
-            return processDTO.getCreatedBy() != null;
-        } else {
-            return false;
+        if(null != existing)
+            throw new RecordAlreadyExistsException(ConstantsUtil.RECORD_ALREADY_EXISTS_FOR + ConstantsUtil.SPACE + processDTO.getProcessName());
+    }
+
+    public boolean validateProcessForUpdate(ProcessDTO processDTO) {
+        boolean isUnique = validateUpdateValuesForUniqueness(processDTO);
+        if (!isUnique) {
+            throw new RecordAlreadyExistsException(ConstantsUtil.RECORD_ALREADY_EXISTS_FOR + ConstantsUtil.SPACE + processDTO.getProcessName());
         }
+        boolean isExists = validateIfUpdateRecordStillExists(processDTO);
+        if(!isExists)
+            throw new RecordNotFoundException(ConstantsUtil.RECORD_NOT_FOUND_FOR + ConstantsUtil.SPACE + processDTO.getProcessName());
+
+        return true;
     }
 
-    @Override
-    public Process updateProcess(ProcessDTO processDTO) {
-        boolean isValidated = validateForUpdate(processDTO);
-        if (isValidated) {
-            Process process = convertToEntityForUpdate(processDTO);
-            return processRepository.save(process);
-        } else {
-            return null;
-        }
+    private boolean validateUpdateValuesForUniqueness(ProcessDTO processDTO) {
+        List<Process> existingList = processRepository.findProcessByProcessNameAndCreatedBy(processDTO.getProcessName(), processDTO.getCreatedBy());
+        return existingList.isEmpty() || existingList.get(0).getId().equals(processDTO.getId());
     }
 
-    public boolean validateForUpdate(ProcessDTO processDTO) {
-        Process existing = processRepository.findProcessByIdAndCreatedBy(processDTO.getId(), processDTO.getCreatedBy());
-        if (null != existing) { //Process exists in the DB
-            processDTO.setCreatedBy(existing.getCreatedBy());
-            processDTO.setCreated(existing.getCreated());
-            return processDTO.getProcessName().length() >= 3 && processDTO.getUpdatedBy() != null;
-        } else {
-            return false;
-        }
-    }
-
-    private Process convertToEntityForUpdate(ProcessDTO processDTO) {
-        Process process = new Process();
-        process.setId(processDTO.getId());
-        process.setCreatedBy(processDTO.getCreatedBy());
-        process.setCreated(processDTO.getCreated());
-        process.setProcessName(processDTO.getProcessName());
-        process.setUpdatedBy(processDTO.getUpdatedBy());
-        process.setUpdated(DateTime.now());
-        return process;
-    }
-
-
-    @Override
-    public Boolean deleteByIdAndCreatedBy(ProcessDTO processDTO) {
-        boolean isValidated = validateForDelete(processDTO);
-        if(isValidated){
-            processRepository.deleteByIdAndCreatedBy(processDTO.getId(), processDTO.getCreatedBy());
-            return true;
-        }
-        return false;
-    }
-
-    public boolean validateForDelete(ProcessDTO processDTO){
-        Process existing = processRepository.findProcessByIdAndCreatedBy(processDTO.getId(), processDTO.getCreatedBy());
-        return existing != null;
+    private boolean validateIfUpdateRecordStillExists(ProcessDTO processDTO){
+        Process current = processRepository.findProcessByIdAndCreatedBy(processDTO.getId(), processDTO.getCreatedBy());
+        return null != current;
     }
 }

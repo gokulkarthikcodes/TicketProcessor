@@ -1,8 +1,10 @@
 package com.sync.ticketprocessor.conversion;
 
 import com.sync.ticketprocessor.dto.CustomerDTO;
+import com.sync.ticketprocessor.dto.ProcessDTO;
 import com.sync.ticketprocessor.entity.Address;
 import com.sync.ticketprocessor.entity.Customer;
+import com.sync.ticketprocessor.entity.Process;
 
 public class Converter {
 
@@ -52,5 +54,27 @@ public class Converter {
         customerDTO.setState(customer.getAddress().getState());
         customerDTO.setPinCode(customer.getAddress().getPinCode());
         return customerDTO;
+    }
+
+    public static ProcessDTO covertProcessFromEntityToDTO(Process process){
+        ProcessDTO processDTO = new ProcessDTO();
+        processDTO.setId(process.getId());
+        processDTO.setProcessName(process.getProcessName());
+        processDTO.setCreatedBy(process.getCreatedBy());
+        processDTO.setCreated(process.getCreated());
+        processDTO.setUpdatedBy(process.getUpdatedBy());
+        processDTO.setUpdated(process.getUpdated());
+        return processDTO;
+    }
+
+    public static Process convertProcessFromDTOToEntity(ProcessDTO processDTO){
+        Process process = new Process();
+        process.setId(processDTO.getId());
+        process.setProcessName(processDTO.getProcessName());
+        process.setCreatedBy(processDTO.getCreatedBy());
+        process.setCreated(processDTO.getCreated());
+        process.setUpdatedBy(processDTO.getUpdatedBy());
+        process.setUpdated(processDTO.getUpdated());
+        return process;
     }
 }

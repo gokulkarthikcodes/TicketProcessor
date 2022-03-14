@@ -3,13 +3,13 @@ package com.sync.ticketprocessor.controller;
 import com.sync.ticketprocessor.dto.CustomerDTO;
 import com.sync.ticketprocessor.service.CustomerService;
 import com.sync.ticketprocessor.service.impl.UserDetailsImpl;
+import com.sync.ticketprocessor.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,26 +29,25 @@ public class CustomerController {
 
     @PostMapping(value = "/save")
     public ResponseEntity<CustomerDTO> createCustomer(Authentication authentication,
-                                                      @Valid @RequestBody CustomerDTO customerDTO) {
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-        customerDTO.createAuditForSave(userPrincipal.getUsername());
+                                                      @RequestBody CustomerDTO customerDTO) {
+        Validator.validateCustomerDTO(customerDTO);
+        customerDTO.createAuditForSave(authentication);
         customerDTO = customerService.createCustomer(customerDTO);
         return ResponseEntity.status(HttpStatus.OK).body(customerDTO);
     }
 
     @PostMapping(value = "/update")
     public ResponseEntity<CustomerDTO> updateCustomer(Authentication authentication,
-                                                      @Valid @RequestBody CustomerDTO customerDTO) {
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-        customerDTO.createAuditForUpdate(userPrincipal.getUsername());
+                                                      @RequestBody CustomerDTO customerDTO) {
+        Validator.validateCustomerDTO(customerDTO);
+        customerDTO.createAuditForUpdate(authentication);
         customerDTO = customerService.updateCustomer(customerDTO);
         return ResponseEntity.status(HttpStatus.OK).body(customerDTO);
     }
 
     @PostMapping(value = "/delete")
     public ResponseEntity<Boolean> deleteCustomer(@RequestBody CustomerDTO customerDTO) {
-        Boolean flag = false;
-        flag = customerService.deleteCustomer(customerDTO.getId(), customerDTO.getCreatedBy());
+        Boolean flag = customerService.deleteCustomer(customerDTO);
         return ResponseEntity.status(HttpStatus.OK).body(flag);
     }
 }

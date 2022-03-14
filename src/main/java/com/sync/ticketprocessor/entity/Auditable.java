@@ -1,6 +1,8 @@
 package com.sync.ticketprocessor.entity;
 
+import com.sync.ticketprocessor.service.impl.UserDetailsImpl;
 import org.joda.time.DateTime;
+import org.springframework.security.core.Authentication;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -29,27 +31,26 @@ public class Auditable {
 
 
 
-	public void createAuditForSave(String createdBy) {
+	public void createAuditForSave(Authentication authentication) {
+		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+
 		DateTime dateTime = DateTime.now();
 
 		if (this.created == null) {
 			this.created = dateTime;
 		}
 		if (this.createdBy == null) {
-			this.createdBy = createdBy;
+			this.createdBy = userPrincipal.getUsername();
 		}
-
-		this.updated = dateTime;
-		this.updatedBy = createdBy;
 
 		this.active = Boolean.TRUE;
 	}
 
-	public void createAuditForUpdate(String updatedBy) {
-
+	public void createAuditForUpdate(Authentication authentication) {
+		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 		DateTime dateTime = DateTime.now();
 		this.updated = dateTime;
-		this.updatedBy = updatedBy;
+		this.updatedBy = userPrincipal.getUsername();
 		this.active = Boolean.TRUE;
 	}
 

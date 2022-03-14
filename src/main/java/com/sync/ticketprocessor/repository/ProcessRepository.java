@@ -8,21 +8,14 @@ import java.util.List;
 
 public interface ProcessRepository extends MongoRepository<Process,String> {
 
-    @Query("{'processName':?0}")
-    Process getProcessByName(String processName);
-
-    @Query("{'processId':?0}")
-    Process getProcessById(Integer processId);
-
     @Query("{'createdBy' :?0}")
     List<Process> getProcessByCreatedBy(String createdBy);
+
+    List<Process> findProcessByProcessNameAndCreatedBy(String processName, String createdBy);
 
     Process save(Process process);
 
     Process deleteByIdAndCreatedBy(String id, String createdBy);
-
-    @Query("{'processOrder': ?0, 'createdBy' :?1}")
-    Process findProcessByOrderAndCreatedBy(Integer processOrder, String createdBy);
 
     @Query("{'processName': ?0, 'createdBy' :?1}")
     Process findProcessByNameAndCreatedBy(String processName, String createdBy);
