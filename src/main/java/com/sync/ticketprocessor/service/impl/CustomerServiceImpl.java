@@ -75,70 +75,52 @@ public class CustomerServiceImpl implements CustomerService {
         return Converter.convertCustomerFromEntityToDTO(customer);
     }
 
-    private boolean validateCustomerForSave(CustomerDTO customerDTO) {
-        String paramCompanyName;
-        String paramEmailId;
-        String paramGST;
-        String paramPrimaryContactNumber;
-        if (null == customerDTO.getCompanyName() || customerDTO.getCompanyName().length() == 0) {
-            paramCompanyName = "d3567187481197c992e6888c2b619287";
-        } else
-            paramCompanyName = customerDTO.getCompanyName();
-        if (null == customerDTO.getGst() || customerDTO.getGst().length() == 0) {
-            paramGST = "d3567187481197c992e6888c2b619287";
-        } else {
-            paramGST = customerDTO.getGst();
-        }
-        if (null == customerDTO.getPrimaryContactNumber() || customerDTO.getPrimaryContactNumber().length() == 0) {
-            paramPrimaryContactNumber = "d3567187481197c992e6888c2b619287";
-        } else {
-            paramPrimaryContactNumber = customerDTO.getPrimaryContactNumber();
-        }
-        if (null == customerDTO.getEmailId() || customerDTO.getEmailId().length() == 0) {
-            paramEmailId = "d3567187481197c992e6888c2b619287";
-        } else {
-            paramEmailId = customerDTO.getEmailId();
-        }
+    private boolean validateCustomerForUpdate(CustomerDTO customerDTO) {
 
-        List<Customer> existing = customerCrudRepository.findCustomers(customerDTO.getCreatedBy(), paramCompanyName, paramPrimaryContactNumber, paramGST, paramEmailId);
-        if (!existing.isEmpty())
+        boolean isUnique = validateUpdateValuesForUniqueNess(customerDTO);
+        if (!isUnique)
             throw new RecordAlreadyExistsException(ConstantsUtil.RECORD_ALREADY_EXISTS_FOR + ConstantsUtil.SPACE + customerDTO.getCustomerName() + ConstantsUtil.SPACE + customerDTO.getPrimaryContactNumber() + ConstantsUtil.SPACE + customerDTO.getGst() + ConstantsUtil.SPACE + customerDTO.getEmailId());
+
+        boolean isExists = validateIfUpdateRecordStillExists(customerDTO);
+        if (!isExists)
+            throw new RecordNotFoundException(ConstantsUtil.RECORD_NOT_FOUND_FOR + ConstantsUtil.SPACE + customerDTO.getCustomerName());
+
         Validator.validateCustomerDTO(customerDTO);
         return true;
     }
 
-    private boolean validateCustomerForUpdate(CustomerDTO customerDTO) {
-        String paramCompanyName;
-        String paramEmailId;
-        String paramGST;
-        String paramPrimaryContactNumber;
-        if (null == customerDTO.getCompanyName() || customerDTO.getCompanyName().length() == 0) {
-            paramCompanyName = "d3567187481197c992e6888c2b619287";
-        } else
-            paramCompanyName = customerDTO.getCompanyName();
-        if (null == customerDTO.getGst() || customerDTO.getGst().length() == 0) {
-            paramGST = "d3567187481197c992e6888c2b619287";
-        } else {
-            paramGST = customerDTO.getGst();
-        }
-        if (null == customerDTO.getPrimaryContactNumber() || customerDTO.getPrimaryContactNumber().length() == 0) {
-            paramPrimaryContactNumber = "d3567187481197c992e6888c2b619287";
-        } else {
-            paramPrimaryContactNumber = customerDTO.getPrimaryContactNumber();
-        }
-        if (null == customerDTO.getEmailId() || customerDTO.getEmailId().length() == 0) {
-            paramEmailId = "d3567187481197c992e6888c2b619287";
-        } else {
-            paramEmailId = customerDTO.getEmailId();
-        }
+    private boolean validateUpdateValuesForUniqueNess(CustomerDTO customerDTO) {
+        String paramCompanyName = ConstantsUtil.getDefaultArgument(customerDTO.getCompanyName());
+        String paramEmailId = ConstantsUtil.getDefaultArgument(customerDTO.getEmailId());
+        String paramGST = ConstantsUtil.getDefaultArgument(customerDTO.getGst());
+        String paramPrimaryContactNumber = ConstantsUtil.getDefaultArgument(customerDTO.getPrimaryContactNumber());
 
         List<Customer> existingList = customerCrudRepository.findCustomers(customerDTO.getCreatedBy(), paramCompanyName, paramPrimaryContactNumber, paramGST, paramEmailId);
-        if(!existingList.isEmpty())
-            throw new RecordAlreadyExistsException(ConstantsUtil.RECORD_ALREADY_EXISTS_FOR + ConstantsUtil.SPACE + customerDTO.getCustomerName() + ConstantsUtil.SPACE + customerDTO.getPrimaryContactNumber() + ConstantsUtil.SPACE + customerDTO.getGst() + ConstantsUtil.SPACE + customerDTO.getEmailId());
+        return existingList.isEmpty() || existingList.get(0).getId().equals(customerDTO.getId());
+    }
+
+
+    private boolean validateIfUpdateRecordStillExists(CustomerDTO customerDTO) {
         Customer existing = customerCrudRepository.findByIdAndCreatedBy(customerDTO.getId(), customerDTO.getCreatedBy());
-        if (null == existing)
-            throw new RecordNotFoundException(ConstantsUtil.RECORD_NOT_FOUND_FOR + ConstantsUtil.SPACE + customerDTO.getCustomerName());
+        return null != existing;
+    }
+
+    private boolean validateCustomerForSave(CustomerDTO customerDTO) {
+        boolean isUnique = validateSaveValuesForUniqueNess(customerDTO);
+        if (!isUnique)
+            throw new RecordAlreadyExistsException(ConstantsUtil.RECORD_ALREADY_EXISTS_FOR + ConstantsUtil.SPACE + customerDTO.getCustomerName() + ConstantsUtil.SPACE + customerDTO.getPrimaryContactNumber() + ConstantsUtil.SPACE + customerDTO.getGst() + ConstantsUtil.SPACE + customerDTO.getEmailId());
         Validator.validateCustomerDTO(customerDTO);
         return true;
     }
+
+    private boolean validateSaveValuesForUniqueNess(CustomerDTO customerDTO) {
+        String paramCompanyName = ConstantsUtil.getDefaultArgument(customerDTO.getCompanyName());
+        String paramEmailId = ConstantsUtil.getDefaultArgument(customerDTO.getEmailId());
+        String paramGST = ConstantsUtil.getDefaultArgument(customerDTO.getGst());
+        String paramPrimaryContactNumber = ConstantsUtil.getDefaultArgument(customerDTO.getPrimaryContactNumber());
+
+        List<Customer> existingList = customerCrudRepository.findCustomers(customerDTO.getCreatedBy(), paramCompanyName, paramPrimaryContactNumber, paramGST, paramEmailId);
+        return existingList.isEmpty();
+    }
+
 }

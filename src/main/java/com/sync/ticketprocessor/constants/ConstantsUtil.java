@@ -22,4 +22,11 @@ public class ConstantsUtil {
     public static final String INVALID_CITY = "INVALID CITY";
     public static final String INVALID_STATE = "INVALID_STATE";
 
+    public static String getDefaultArgument(String uniqueArgument){
+        if(null == uniqueArgument || uniqueArgument.length() == 0)
+            return "d3567187481197c992e6888c2b619287";
+        else
+            return uniqueArgument;
+    }
+
 }

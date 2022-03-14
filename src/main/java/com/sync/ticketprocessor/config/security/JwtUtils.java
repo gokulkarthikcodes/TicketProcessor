@@ -1,21 +1,14 @@
 package com.sync.ticketprocessor.config.security;
 
-import java.util.Date;
-
+import com.sync.ticketprocessor.service.impl.UserDetailsImpl;
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.sync.ticketprocessor.service.impl.UserDetailsImpl;
-
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import java.util.Date;
 
 @Component
 public class JwtUtils {
@@ -31,8 +24,6 @@ public class JwtUtils {
 		try {
 
 			UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-
-//			String encodedString = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
 
 			return Jwts.builder().setSubject(userPrincipal.getUsername()).setIssuedAt(new Date())
 					.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
