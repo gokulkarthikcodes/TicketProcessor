@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "e570815a-b17f-4389-af96-605f3cfcbf80",
+		"name": "Process",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Processes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/process/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"process",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save Process",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"processName\": \"Gokul Printing\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/process/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"process",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Process",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"622ed1558b1e3a38b85719a7\",\r\n    \"createdBy\": \"user@gmail.com\",\r\n    \"created\": \"14-03-2022 01:23:33 AM\",\r\n    \"updatedBy\": null,\r\n    \"updated\": null,\r\n    \"active\": false,\r\n    \"processName\": \"Gokul Printing\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/process/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"process",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Process",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"622ed1558b1e3a38b85719a7\",\r\n    \"createdBy\": \"user@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/process/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"process",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

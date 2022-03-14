@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "3fd7f958-8e4f-4a18-b15d-c47d396f5dba",
+		"name": "Customer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/customer/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save Customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"active\": true,\r\n        \"customerName\": null,\r\n        \"companyName\": \"GokulkarthikCompany9\",\r\n        \"primaryContactNumber\": \"7777785661\",\r\n        \"secContactNumber\": null,\r\n        \"gst\": \"\",\r\n        \"emailId\": \"\",\r\n        \"streetLine1\": \"444\",\r\n        \"streetLine2\": \"\",\r\n        \"city\": \"Sivakasi\",\r\n        \"state\": \"Tamil Nadu\",\r\n        \"country\": null,\r\n        \"pinCode\": \"626123\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/customer/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"622ecef27ba4861f37ca6d11\",\r\n    \"createdBy\": \"user@gmail.com\",\r\n    \"created\": \"14-03-2022 01:13:21 AM\",\r\n    \"updatedBy\": null,\r\n    \"updated\": null,\r\n    \"active\": true,\r\n    \"customerName\": null,\r\n    \"companyName\": \"GokulkarthikCompany9\",\r\n    \"primaryContactNumber\": \"7777785662\",\r\n    \"secContactNumber\": null,\r\n    \"gst\": \"\",\r\n    \"emailId\": \"\",\r\n    \"streetLine1\": \"444\",\r\n    \"streetLine2\": \"\",\r\n    \"city\": \"Sivakasi\",\r\n    \"state\": \"Tamil Nadu\",\r\n    \"country\": null,\r\n    \"pinCode\": \"626123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/customer/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"622ecef27ba4861f37ca6d11\",\r\n    \"createdBy\": \"user@gmail.com\",\r\n    \"created\": \"14-03-2022 01:13:21 AM\",\r\n    \"updatedBy\": \"user@gmail.com\",\r\n    \"updated\": \"14-03-2022 01:14:33 AM\",\r\n    \"active\": true,\r\n    \"customerName\": null,\r\n    \"companyName\": \"GokulkarthikCompany9\",\r\n    \"primaryContactNumber\": \"7777785662\",\r\n    \"secContactNumber\": null,\r\n    \"gst\": \"\",\r\n    \"emailId\": \"\",\r\n    \"streetLine1\": \"444\",\r\n    \"streetLine2\": \"\",\r\n    \"city\": \"Sivakasi\",\r\n    \"state\": \"Tamil Nadu\",\r\n    \"country\": null,\r\n    \"pinCode\": \"626123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/customer/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
