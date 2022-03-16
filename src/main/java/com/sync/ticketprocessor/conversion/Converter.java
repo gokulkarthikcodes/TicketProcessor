@@ -2,9 +2,11 @@ package com.sync.ticketprocessor.conversion;
 
 import com.sync.ticketprocessor.dto.CustomerDTO;
 import com.sync.ticketprocessor.dto.ProcessDTO;
+import com.sync.ticketprocessor.dto.VendorDTO;
 import com.sync.ticketprocessor.entity.Address;
 import com.sync.ticketprocessor.entity.Customer;
 import com.sync.ticketprocessor.entity.Process;
+import com.sync.ticketprocessor.entity.Vendor;
 
 public class Converter {
 
@@ -76,5 +78,48 @@ public class Converter {
         process.setUpdatedBy(processDTO.getUpdatedBy());
         process.setUpdated(processDTO.getUpdated());
         return process;
+    }
+
+    public static Vendor convertVendorFromDTOToEntity(VendorDTO vendorDTO){
+        Vendor vendor = new Vendor();
+        Address address = new Address();
+
+        vendor.setId(vendorDTO.getId());
+        vendor.setUpdated(vendorDTO.getUpdated());
+        vendor.setUpdatedBy(vendorDTO.getUpdatedBy());
+        vendor.setVendorName(vendorDTO.getVendorName());
+        vendor.setPrimaryContactNumber(vendorDTO.getPrimaryContactNumber());
+        vendor.setEmailId(vendorDTO.getEmailId());
+        vendor.setAllocatedProcesses(vendorDTO.getAllocatedProcesses());
+        vendor.setCreatedBy(vendorDTO.getCreatedBy());
+        vendor.setCreated(vendorDTO.getCreated());
+        vendor.setActive(vendorDTO.isActive());
+        address.setStreetLine1(vendorDTO.getStreetLine1());
+        address.setStreetLine2(vendorDTO.getStreetLine2());
+        address.setCity(vendorDTO.getCity());
+        address.setState(vendorDTO.getState());
+        address.setPinCode(vendorDTO.getPinCode());
+        vendor.setAddress(address);
+        return vendor;
+    }
+
+    public static VendorDTO convertVendorFromEntityToDTO(Vendor vendor){
+        VendorDTO vendorDTO = new VendorDTO();
+        vendorDTO.setUpdated(vendor.getUpdated());
+        vendorDTO.setUpdatedBy(vendor.getUpdatedBy());
+        vendorDTO.setId(vendor.getId());
+        vendorDTO.setVendorName(vendor.getVendorName());
+        vendorDTO.setPrimaryContactNumber(vendor.getPrimaryContactNumber());
+        vendorDTO.setEmailId(vendor.getEmailId());
+        vendorDTO.setAllocatedProcesses(vendor.getAllocatedProcesses());
+        vendorDTO.setCreatedBy(vendor.getCreatedBy());
+        vendorDTO.setCreated(vendor.getCreated());
+        vendorDTO.setActive(vendor.isActive());
+        vendorDTO.setStreetLine1(vendor.getAddress().getStreetLine1());
+        vendorDTO.setStreetLine2(vendor.getAddress().getStreetLine2());
+        vendorDTO.setCity(vendor.getAddress().getCity());
+        vendorDTO.setState(vendor.getAddress().getState());
+        vendorDTO.setPinCode(vendor.getAddress().getPinCode());
+        return vendorDTO;
     }
 }

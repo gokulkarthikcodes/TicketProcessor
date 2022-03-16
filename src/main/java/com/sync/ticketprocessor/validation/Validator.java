@@ -3,6 +3,7 @@ package com.sync.ticketprocessor.validation;
 import com.sync.ticketprocessor.constants.ConstantsUtil;
 import com.sync.ticketprocessor.dto.CustomerDTO;
 import com.sync.ticketprocessor.dto.ProcessDTO;
+import com.sync.ticketprocessor.dto.VendorDTO;
 import com.sync.ticketprocessor.exception.InputValidationFailedException;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ public class Validator {
     private static final String GST_REGEX = "^([0][1-9]|[1-2][0-9]|[3][0-7])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$";
     private static final String COMPANY_NAME_REGEX = "^[.@&]?[a-zA-Z0-9 ]+[ !.@&()]?[ a-zA-Z0-9!()]+";
     private static final String PROCESS_NAME_REGEX = "^[.@&]?[a-zA-Z0-9 ]+[ !.@&()]?[ a-zA-Z0-9!()]+";
+    private static final String VENDOR_NAME_REGEX = "^[.@&]?[a-zA-Z0-9 ]+[ !.@&()]?[ a-zA-Z0-9!()]+";
     private static final String CITY_REGEX = "^[a-zA-Z]+(?:[\\s-][a-zA-Z]+)*$";
     private static final String STATE_REGEX = "^[a-zA-Z]+(?:[\\s-][a-zA-Z]+)*$";
     private Validator() {
@@ -111,6 +113,17 @@ public class Validator {
         return true;
     }
 
+    private static boolean validateVendorName(String vendorName){
+        if (null == vendorName || vendorName.length() == 0)
+            throw new InputValidationFailedException(ConstantsUtil.INVALID_PROCESS_NAME);
+        boolean check = Pattern.compile(VENDOR_NAME_REGEX)
+                .matcher(vendorName)
+                .matches();
+        if (!check)
+            throw new InputValidationFailedException(ConstantsUtil.INVALID_PROCESS_NAME);
+        return true;
+    }
+
     public static boolean validateCustomerDTO(CustomerDTO customerDTO) {
         validateCompanyName(customerDTO.getCompanyName());
         validatePhone(customerDTO.getPrimaryContactNumber());
@@ -119,6 +132,16 @@ public class Validator {
         validateCity(customerDTO.getCity());
         validateState(customerDTO.getState());
         validatePinCode(customerDTO.getPinCode());
+        return true;
+    }
+
+    public static boolean validateVendorDTO(VendorDTO vendorDTO) {
+        validateVendorName(vendorDTO.getVendorName());
+        validatePhone(vendorDTO.getPrimaryContactNumber());
+        validateEmail(vendorDTO.getEmailId());
+        validateCity(vendorDTO.getCity());
+        validateState(vendorDTO.getState());
+        validatePinCode(vendorDTO.getPinCode());
         return true;
     }
 

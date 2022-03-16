@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "b23427d2-da01-4886-8cf8-dfcf1c5c2f0d",
+		"name": "Vendor",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Save Vendor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"vendorName\": \"KannaVendor22\",\r\n        \"primaryContactNumber\": \"9895959595\",\r\n        \"secContactNumber\": null,\r\n        \"emailId\": \"\",\r\n        \"streetLine1\": \"888\",\r\n        \"streetLine2\": \"\",\r\n        \"city\": \"Sivakasi\",\r\n        \"state\": \"Tamil Nadu\",\r\n        \"country\": null,\r\n        \"pinCode\": \"626123\",\r\n        \"allocatedProcesses\": [\"623204154e35bb484c1b9148\", \"6232041e4e35bb484c1b9149\"]\r\n\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/vendor/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vendor",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Vendor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"62321f070a828f7f4e8807a9\",\r\n    \"createdBy\": \"mahesh\",\r\n    \"created\": \"16-03-2022 23:00:13 pm\",\r\n    \"updatedBy\": null,\r\n    \"updated\": null,\r\n    \"active\": true,\r\n    \"vendorName\": \"KannaVendor22\",\r\n    \"primaryContactNumber\": \"9895959595\",\r\n    \"secContactNumber\": null,\r\n    \"emailId\": \"\",\r\n    \"streetLine1\": \"888\",\r\n    \"streetLine2\": \"\",\r\n    \"city\": \"Sivakasi\",\r\n    \"state\": \"Tamil Nadu\",\r\n    \"country\": null,\r\n    \"pinCode\": \"626123\",\r\n    \"allocatedProcesses\": [\r\n        \"623204154e35bb484c1b9148f\",\r\n        \"6232041e4e35bb484c1b9149f\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/vendor/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vendor",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Vendors",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/vendor/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vendor",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Vendor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": \"62321ff8985ec84166fee2c7\",\r\n        \"createdBy\": \"mahesh\",\r\n        \"created\": \"16-03-2022 23:05:52 pm\",\r\n        \"updatedBy\": null,\r\n        \"updated\": null,\r\n        \"active\": true,\r\n        \"vendorName\": \"KannaVendor22\",\r\n        \"primaryContactNumber\": \"9895959595\",\r\n        \"secContactNumber\": null,\r\n        \"emailId\": \"\",\r\n        \"streetLine1\": \"888\",\r\n        \"streetLine2\": \"\",\r\n        \"city\": \"Sivakasi\",\r\n        \"state\": \"Tamil Nadu\",\r\n        \"country\": null,\r\n        \"pinCode\": \"626123\",\r\n        \"allocatedProcesses\": [\r\n            \"623204154e35bb484c1b9148\",\r\n            \"6232041e4e35bb484c1b9149\"\r\n        ]\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/vendor/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"vendor",
+						"update"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

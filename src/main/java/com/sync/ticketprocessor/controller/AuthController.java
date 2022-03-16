@@ -1,27 +1,5 @@
 package com.sync.ticketprocessor.controller;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.sync.ticketprocessor.config.security.JwtUtils;
 import com.sync.ticketprocessor.entity.User;
 import com.sync.ticketprocessor.enums.Role;
@@ -31,6 +9,22 @@ import com.sync.ticketprocessor.payload.login.MessageResponse;
 import com.sync.ticketprocessor.payload.login.SignupRequest;
 import com.sync.ticketprocessor.repository.UserCrudRepository;
 import com.sync.ticketprocessor.service.impl.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -107,5 +101,19 @@ public class AuthController {
 		userCrudRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+	}
+
+
+	@GetMapping(value = "/logout")
+	public ResponseEntity<?> logoutUser(Authentication authentication) {
+		ResponseCookie resCookie = ResponseCookie.from("jwt", null)
+				.httpOnly(true)
+				.secure(false)
+				.path("/")
+				.maxAge(0)
+				.build();
+
+		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, resCookie.toString()).body("Logged Out");
+
 	}
 }
