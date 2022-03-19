@@ -3,6 +3,7 @@ package com.sync.ticketprocessor.validation;
 import com.sync.ticketprocessor.constants.ConstantsUtil;
 import com.sync.ticketprocessor.dto.CustomerDTO;
 import com.sync.ticketprocessor.dto.ProcessDTO;
+import com.sync.ticketprocessor.dto.ProductDTO;
 import com.sync.ticketprocessor.dto.VendorDTO;
 import com.sync.ticketprocessor.exception.InputValidationFailedException;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ public class Validator {
     private static final String COMPANY_NAME_REGEX = "^[.@&]?[a-zA-Z0-9 ]+[ !.@&()]?[ a-zA-Z0-9!()]+";
     private static final String PROCESS_NAME_REGEX = "^[.@&]?[a-zA-Z0-9 ]+[ !.@&()]?[ a-zA-Z0-9!()]+";
     private static final String VENDOR_NAME_REGEX = "^[.@&]?[a-zA-Z0-9 ]+[ !.@&()]?[ a-zA-Z0-9!()]+";
+    private static final String PRODUCT_NAME_REGEX = "^[.@&]?[a-zA-Z0-9 ]+[ !.@&()]?[ a-zA-Z0-9!()]+";
     private static final String CITY_REGEX = "^[a-zA-Z]+(?:[\\s-][a-zA-Z]+)*$";
     private static final String STATE_REGEX = "^[a-zA-Z]+(?:[\\s-][a-zA-Z]+)*$";
     private Validator() {
@@ -115,12 +117,23 @@ public class Validator {
 
     private static boolean validateVendorName(String vendorName){
         if (null == vendorName || vendorName.length() == 0)
-            throw new InputValidationFailedException(ConstantsUtil.INVALID_PROCESS_NAME);
+            throw new InputValidationFailedException(ConstantsUtil.INVALID_VENDOR_NAME);
         boolean check = Pattern.compile(VENDOR_NAME_REGEX)
                 .matcher(vendorName)
                 .matches();
         if (!check)
-            throw new InputValidationFailedException(ConstantsUtil.INVALID_PROCESS_NAME);
+            throw new InputValidationFailedException(ConstantsUtil.INVALID_VENDOR_NAME);
+        return true;
+    }
+
+    private static boolean validateProductsName(String productName){
+        if (null == productName || productName.length() == 0)
+            throw new InputValidationFailedException(ConstantsUtil.INVALID_PRODUCT_NAME);
+        boolean check = Pattern.compile(PRODUCT_NAME_REGEX)
+                .matcher(productName)
+                .matches();
+        if (!check)
+            throw new InputValidationFailedException(ConstantsUtil.INVALID_PRODUCT_NAME);
         return true;
     }
 
@@ -147,6 +160,11 @@ public class Validator {
 
     public static boolean validateProcessDTO(ProcessDTO processDTO){
         validateProcessName(processDTO.getProcessName());
+        return true;
+    }
+
+    public static boolean validateProductDTO(ProductDTO productDTO){
+        validateProductsName(productDTO.getProductName());
         return true;
     }
 }

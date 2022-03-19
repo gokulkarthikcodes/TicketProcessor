@@ -2,6 +2,7 @@ package com.sync.ticketprocessor.entity;
 
 import com.sync.ticketprocessor.service.impl.UserDetailsImpl;
 import org.joda.time.DateTime;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.security.core.Authentication;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -19,6 +20,7 @@ public class Auditable {
 	@Id
 	private String id;
 
+	@Indexed
 	private String createdBy;
 	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss a", timezone = "Asia/Kolkata")
 	private DateTime created;

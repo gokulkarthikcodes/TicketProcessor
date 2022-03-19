@@ -2,11 +2,10 @@ package com.sync.ticketprocessor.conversion;
 
 import com.sync.ticketprocessor.dto.CustomerDTO;
 import com.sync.ticketprocessor.dto.ProcessDTO;
+import com.sync.ticketprocessor.dto.ProductDTO;
 import com.sync.ticketprocessor.dto.VendorDTO;
-import com.sync.ticketprocessor.entity.Address;
-import com.sync.ticketprocessor.entity.Customer;
 import com.sync.ticketprocessor.entity.Process;
-import com.sync.ticketprocessor.entity.Vendor;
+import com.sync.ticketprocessor.entity.*;
 
 public class Converter {
 
@@ -121,5 +120,27 @@ public class Converter {
         vendorDTO.setState(vendor.getAddress().getState());
         vendorDTO.setPinCode(vendor.getAddress().getPinCode());
         return vendorDTO;
+    }
+
+    public static ProductDTO covertProductFromEntityToDTO(Product product){
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(product.getId());
+        productDTO.setProductName(product.getProductName());
+        productDTO.setCreatedBy(product.getCreatedBy());
+        productDTO.setCreated(product.getCreated());
+        productDTO.setUpdatedBy(product.getUpdatedBy());
+        productDTO.setUpdated(product.getUpdated());
+        return productDTO;
+    }
+
+    public static Product convertProductFromDTOToEntity(ProductDTO productDTO){
+        Product product = new Product();
+        product.setId(productDTO.getId());
+        product.setProductName(productDTO.getProductName());
+        product.setCreatedBy(productDTO.getCreatedBy());
+        product.setCreated(productDTO.getCreated());
+        product.setUpdatedBy(productDTO.getUpdatedBy());
+        product.setUpdated(productDTO.getUpdated());
+        return product;
     }
 }

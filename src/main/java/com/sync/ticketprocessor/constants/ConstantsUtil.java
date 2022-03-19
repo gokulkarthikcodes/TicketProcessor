@@ -22,6 +22,8 @@ public class ConstantsUtil {
     public static final String INVALID_CITY = "INVALID CITY";
     public static final String INVALID_STATE = "INVALID_STATE";
     public static final String INVALID_PROCESS_NAME = "INVALID_PROCESS_NAME";
+    public static final String INVALID_VENDOR_NAME = "INVALID_VENDOR_NAME";
+    public static final String INVALID_PRODUCT_NAME = "INVALID_PRODUCT_NAME";
 
     public static String getDefaultArgument(String uniqueArgument){
         if(null == uniqueArgument || uniqueArgument.length() == 0)
