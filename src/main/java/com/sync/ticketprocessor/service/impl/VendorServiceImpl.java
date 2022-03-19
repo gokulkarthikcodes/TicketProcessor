@@ -104,11 +104,11 @@ public class VendorServiceImpl implements VendorService {
 
     private List<String> validateAllProcessesById(VendorDTO vendorDTO) {
         List<String> notFoundProcessList = null;
-        List<Process> processList = processRepository.findAllProcessInIdList(vendorDTO.getAllocatedProcesses());
-        Set<String> processIdSet = processList.stream().map(Process::getId).collect(Collectors.toSet());
+        List<Process> processList = processRepository.findByProcessNameList(vendorDTO.getAllocatedProcesses());
+        Set<String> processNameSet = processList.stream().map(Process::getProcessName).collect(Collectors.toSet());
 
         notFoundProcessList = vendorDTO.getAllocatedProcesses().stream()
-                .filter(processId -> !processIdSet.contains(processId))
+                .filter(processName -> !processNameSet.contains(processName))
                 .collect(Collectors.toList());
 
         return notFoundProcessList;
