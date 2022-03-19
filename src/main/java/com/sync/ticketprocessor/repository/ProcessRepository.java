@@ -25,5 +25,8 @@ public interface ProcessRepository extends MongoRepository<Process,String> {
 
     @Query(value = "{ '_id' : {'$in' : ?0 } }")
     List<Process> findAllProcessInIdList(List<String> processIdList);
+
+    @Query(value = "{ 'processName' : {'$in' : ?0 } }")
+    List<Process> findByProcessNameList(List<String> processNameList);
 }
 
