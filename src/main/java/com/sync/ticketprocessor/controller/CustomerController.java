@@ -50,4 +50,36 @@ public class CustomerController {
         Boolean flag = customerService.deleteCustomer(customerDTO);
         return ResponseEntity.status(HttpStatus.OK).body(flag);
     }
+
+    @PostMapping(value="/checkUniqueCompanyName")
+    public ResponseEntity<Boolean> checkUniqueCompanyName(Authentication authentication, @RequestBody CustomerDTO customerDTO){
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        customerDTO.setCreatedBy(userPrincipal.getUsername());
+        boolean flag = customerService.checkUniqueCompanyName(customerDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(flag);
+    }
+
+    @PostMapping(value="/checkUniquePrimaryContactNumber")
+    public ResponseEntity<Boolean> checkUniquePrimaryContactNumber(Authentication authentication, @RequestBody CustomerDTO customerDTO){
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        customerDTO.setCreatedBy(userPrincipal.getUsername());
+        boolean flag = customerService.checkUniquePrimaryContactNumber(customerDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(flag);
+    }
+
+    @PostMapping(value="/checkUniqueGST")
+    public ResponseEntity<Boolean> checkUniqueGST(Authentication authentication, @RequestBody CustomerDTO customerDTO){
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        customerDTO.setCreatedBy(userPrincipal.getUsername());
+        boolean flag = customerService.checkUniqueGST(customerDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(flag);
+    }
+
+    @PostMapping(value="/checkUniqueEmailId")
+    public ResponseEntity<Boolean> checkUniqueEmailId(Authentication authentication, @RequestBody CustomerDTO customerDTO){
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        customerDTO.setCreatedBy(userPrincipal.getUsername());
+        boolean flag = customerService.checkUniqueEmailId(customerDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(flag);
+    }
 }

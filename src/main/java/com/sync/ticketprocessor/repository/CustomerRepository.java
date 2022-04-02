@@ -16,4 +16,12 @@ public interface CustomerRepository extends MongoRepository<Customer, String> {
 
 	@Query("{'createdBy' : ?0,$or:[{'emailId' : ?4,},{'primaryContactNumber' : ?2},{'companyName' : ?1},{'gst' : ?3}]}")
 	List<Customer> findCustomers(String createdBy, String companyName, String primaryContactNumber, String gst, String email);
+
+	Customer findByCompanyNameAndCreatedBy(String companyName, String createdBy);
+
+	Customer findByPrimaryContactNumberAndCreatedBy(String primaryContactNumber, String createdBy);
+
+	Customer findByGstAndCreatedBy(String gst, String createdBy);
+
+	Customer findByEmailIdAndCreatedBy(String emailId, String createdBy);
 }

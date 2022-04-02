@@ -72,6 +72,30 @@ public class CustomerServiceImpl implements CustomerService {
         return Converter.convertCustomerFromEntityToDTO(customer);
     }
 
+    @Override
+    public boolean checkUniqueCompanyName(CustomerDTO customerDTO) {
+        Customer customer = customerRepository.findByCompanyNameAndCreatedBy(customerDTO.getCompanyName(), customerDTO.getCreatedBy());
+        return null == customer;
+    }
+
+    @Override
+    public boolean checkUniquePrimaryContactNumber(CustomerDTO customerDTO) {
+        Customer customer = customerRepository.findByPrimaryContactNumberAndCreatedBy(customerDTO.getPrimaryContactNumber(), customerDTO.getCreatedBy());
+        return null == customer;
+    }
+
+    @Override
+    public boolean checkUniqueGST(CustomerDTO customerDTO) {
+        Customer customer = customerRepository.findByGstAndCreatedBy(customerDTO.getGst(), customerDTO.getCreatedBy());
+        return null == customer;
+    }
+
+    @Override
+    public boolean checkUniqueEmailId(CustomerDTO customerDTO) {
+        Customer customer = customerRepository.findByEmailIdAndCreatedBy(customerDTO.getEmailId(), customerDTO.getCompanyName());
+        return null == customer;
+    }
+
     private boolean validateCustomerForUpdate(CustomerDTO customerDTO) {
         boolean isUnique = validateUpdateValuesForUniqueNess(customerDTO);
         if (!isUnique)

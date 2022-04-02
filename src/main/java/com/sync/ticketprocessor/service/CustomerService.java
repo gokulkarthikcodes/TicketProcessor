@@ -13,4 +13,12 @@ public interface CustomerService {
 	Boolean deleteCustomer(CustomerDTO customerDTO);
 
 	CustomerDTO updateCustomer(CustomerDTO customerDTO);
+
+	boolean checkUniqueCompanyName(CustomerDTO customerDTO);
+
+	boolean checkUniquePrimaryContactNumber(CustomerDTO customerDTO);
+
+	boolean checkUniqueGST(CustomerDTO customerDTO);
+
+	boolean checkUniqueEmailId(CustomerDTO customerDTO);
 }
